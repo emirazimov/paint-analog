@@ -1,0 +1,25 @@
+.header {
+  height: 84px;
+  border-bottom: 1px solid #c8cbd9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.header-circle {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #5a67ba;
+  color: white;
+}
+.title {
+  margin: 0;
+  font-weight: 700;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #5a67ba;
+}

@@ -1,0 +1,16 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+}
+.sidebar {
+  width: 20%;
+  height: 100vh;
+  background-color: #f1f2f7;
+}
+.main-content {
+  width: 80%;
+}
+.toolbar,
+.canvas {
+  width: 100%;
+}

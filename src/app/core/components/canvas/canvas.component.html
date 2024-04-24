@@ -1,1 +1,8 @@
-<canvas>canvas works!</canvas>
+<canvas
+  #canvas
+  class="canvas-self"
+  (pointermove)="drawing($event)"
+  (pointerdown)="startDraw($event)"
+  (pointerup)="mouseUp()"
+  >canvas works!</canvas
+>

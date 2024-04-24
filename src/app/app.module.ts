@@ -5,6 +5,8 @@ import { StoreModule } from "@ngrx/store";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { CoreModule } from "./core/core.module";
+import { CanvasEventListenerServiceService } from "./shared/services/canvas-event-listener-service.service";
+import { toolbarReducer } from "./store/toolbar/toolbar.reducer";
 
 @NgModule({
   declarations: [AppComponent],
@@ -12,9 +14,9 @@ import { CoreModule } from "./core/core.module";
     CoreModule,
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot({ toolbar: toolbarReducer }),
   ],
-  providers: [],
+  providers: [CanvasEventListenerServiceService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

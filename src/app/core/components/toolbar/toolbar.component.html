@@ -1,14 +1,22 @@
 <div class="toolbar">
   <div class="shapes">
-    <div class="circle"></div>
-    <div class="square"></div>
-    <!-- <div></div> -->
-    <div class="line"></div>
+    <div
+      *ngFor="let item of shapes"
+      [ngClass]="[
+        item.isActive ? item.shapeName : item.shapeName + '-notActive'
+      ]"
+      (click)="onShapeClick(item.shapeName)"
+    ></div>
   </div>
   <div class="colors">
     <div
       *ngFor="let item of colors"
       [ngClass]="['color-circle', item.colorName]"
     ></div>
+  </div>
+
+  <div class="fill-color-container">
+    <input type="checkbox" id="fill-color" (click)="onFillColorClick($event)" />
+    <label for="fill-color">Fill Color</label>
   </div>
 </div>

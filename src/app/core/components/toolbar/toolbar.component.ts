@@ -1,4 +1,16 @@
 import { Component } from "@angular/core";
+import { Store } from "@ngrx/store";
+import {
+  setIsFillColor,
+  setSelectedShape,
+} from "src/app/store/toolbar/toolbar.action";
+import { setIsFillColor } from "./../../../store/toolbar/toolbar.action";
+
+export enum Shapes {
+  Rectangle = "rectangle",
+  Circle = "circle",
+  Line = "line",
+}
 
 @Component({
   selector: "app-toolbar",
@@ -6,6 +18,12 @@ import { Component } from "@angular/core";
   styleUrls: ["./toolbar.component.scss"],
 })
 export class ToolbarComponent {
+  constructor(
+    private store: Store<{
+      toolbar: { selectedShape: string; isFillColor: boolean };
+    }>
+  ) {}
+
   public colors: Array<{ colorName: string; colorHex: string }> = [
     {
       colorName: "red-500",
@@ -64,4 +82,35 @@ export class ToolbarComponent {
       colorHex: "#84CC16",
     },
   ];
+
+  public shapes = [
+    { shapeName: Shapes.Rectangle, isActive: false },
+    { shapeName: Shapes.Circle, isActive: false },
+    { shapeName: Shapes.Line, isActive: false },
+  ];
+
+  fillColor: boolean = false;
+
+  onShapeClick(shapeName: Shapes) {
+    this.shapes.forEach((e) => {
+      if (e.shapeName === shapeName) {
+        e.isActive = true;
+      } else {
+        e.isActive = false;
+      }
+    });
+
+    this.store.dispatch(setSelectedShape({ value: shapeName }));
+  }
+
+  onFillColorClick(event: Event) {
+    console.log(event);
+    this.store.dispatch(setIsFillColor());
+  }
+
+  getIsChecked() {
+    return this.store.select("toolbar").subscribe((data) => {
+      this.fillColor = data.isFillColor;
+    });
+  }
 }

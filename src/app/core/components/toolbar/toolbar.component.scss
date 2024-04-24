@@ -1,5 +1,5 @@
 .toolbar {
-  width: 100%;
+  width: 96%;
   height: 84px;
   display: flex;
   align-items: center;
@@ -12,22 +12,38 @@
   display: flex;
   gap: 14px;
 }
+.circle-notActive,
 .circle {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 1px solid #000000;
+  border: 2px solid #000000;
+  cursor: pointer;
 }
-.square {
+.circle {
+  border: 2px solid #94d6e7bf;
+}
+.rectangle-notActive,
+.rectangle {
   width: 20px;
   height: 18px;
   border: 2px solid #000000;
+  cursor: pointer;
 }
+.rectangle {
+  border: 2px solid #94d6e7bf;
+}
+.line-notActive,
 .line {
   width: 20px;
   height: 12px;
   border-bottom: 2px solid #000000;
   transform: rotate(-45deg);
+  background-color: transparent;
+  cursor: pointer;
+}
+.line {
+  border-bottom: 2px solid #94d6e7bf;
 }
 
 .colors {
@@ -48,6 +64,15 @@
     -webkit-box-shadow: 0px 0px 23px -6px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0px 0px 23px -6px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 0px 23px -6px rgba(0, 0, 0, 0.75);
+  }
+}
+
+.fill-color-container {
+  font-family: Arial, Helvetica, sans-serif;
+  #fill-color {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
   }
 }
 .red-500 {

@@ -1,10 +1,11 @@
 import { Component } from "@angular/core";
 import { Store } from "@ngrx/store";
 import {
+  setColor,
   setIsFillColor,
   setSelectedShape,
 } from "src/app/store/toolbar/toolbar.action";
-import { setIsFillColor } from "./../../../store/toolbar/toolbar.action";
+import { IInitialState } from "src/app/store/toolbar/toolbar.state";
 
 export enum Shapes {
   Rectangle = "rectangle",
@@ -20,7 +21,7 @@ export enum Shapes {
 export class ToolbarComponent {
   constructor(
     private store: Store<{
-      toolbar: { selectedShape: string; isFillColor: boolean };
+      toolbar: IInitialState;
     }>
   ) {}
 
@@ -103,14 +104,21 @@ export class ToolbarComponent {
     this.store.dispatch(setSelectedShape({ value: shapeName }));
   }
 
-  onFillColorClick(event: Event) {
-    console.log(event);
-    this.store.dispatch(setIsFillColor());
+  onColorClick(colorName: string) {
+    this.store.dispatch(setColor({ value: colorName }));
+
+    const $el = document.getElementsByClassName(colorName)[0];
+    const actualColor = window
+      .getComputedStyle($el)
+      .getPropertyValue("background-color");
+
+    this.store.dispatch(setColor({ value: actualColor }));
   }
 
-  getIsChecked() {
-    return this.store.select("toolbar").subscribe((data) => {
-      this.fillColor = data.isFillColor;
-    });
+  onFillColorClick(event: Event) {
+    const targetElement = event.target as HTMLInputElement;
+    const isChecked: boolean = targetElement.checked;
+
+    this.store.dispatch(setIsFillColor({ value: isChecked }));
   }
 }

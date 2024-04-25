@@ -9,6 +9,12 @@ import {
 import { Store, select } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { CanvasEventListenerServiceService } from "src/app/shared/services/canvas-event-listener-service.service";
+import {
+  setCanvas,
+  setRestoreArray,
+  setShapeList,
+} from "src/app/store/toolbar/toolbar.action";
+import { IInitialState } from "src/app/store/toolbar/toolbar.state";
 import { Shapes } from "./../toolbar/toolbar.component";
 
 @Component({
@@ -16,11 +22,11 @@ import { Shapes } from "./../toolbar/toolbar.component";
   templateUrl: "./canvas.component.html",
   styleUrls: ["./canvas.component.scss"],
 })
-export class CanvasComponent implements AfterViewInit {
+export class CanvasComponent implements OnInit, AfterViewInit {
   @ViewChild("canvas", { static: true }) myCanvas!: ElementRef;
   // private myCanvas: ElementRef = {} as ElementRef;
 
-  isChecked$: Observable<boolean>;
+  // isChecked$: Observable<boolean>;
 
   canvas: HTMLCanvasElement | null = null;
 
@@ -37,9 +43,13 @@ export class CanvasComponent implements AfterViewInit {
 
   fillColor: boolean = false;
 
+  color: string | null = null;
+
+  restoreArray: any = null;
+
   constructor(
     private store: Store<{
-      toolbar: { selectedShape: string; isFillColor: boolean };
+      toolbar: IInitialState;
     }>
   ) {
     // this.isChecked$ = this.store.pipe(select(selectIsChecked));
@@ -55,13 +65,21 @@ export class CanvasComponent implements AfterViewInit {
     }
   }
 
+  ngOnInit(): void {
+    this.store.select("toolbar").subscribe((data) => {
+      console.log(data.isFillColor);
+      this.fillColor = data.isFillColor;
+      this.color = data.color;
+    });
+  }
+
   drawRect(e: MouseEvent) {
     this.store.select("toolbar").subscribe((data) => {
       this.fillColor = data.isFillColor;
     });
 
     if (!this.fillColor) {
-      this.context?.strokeRect(
+      return this.context?.strokeRect(
         e.offsetX,
         e.offsetY,
         this.prevMouseX - e.offsetX,
@@ -88,12 +106,27 @@ export class CanvasComponent implements AfterViewInit {
     this.fillColor ? this.context?.fill() : this.context?.stroke();
   }
 
+  drawLine(e: MouseEvent) {
+    this.context?.beginPath();
+    this.context?.moveTo(this.prevMouseX, this.prevMouseY);
+    this.context?.lineTo(e.offsetX, e.offsetY);
+    this.context?.stroke();
+
+    // [lastX, lastY] = [e.offsetX, e.offsetY];
+  }
+
   startDraw(e: MouseEvent) {
     this.isDrawing = true;
-    this.context?.beginPath();
 
     this.prevMouseX = e.offsetX;
     this.prevMouseY = e.offsetY;
+
+    this.context?.beginPath();
+
+    if (this.context) {
+      this.context.strokeStyle = this.color as string;
+      this.context.fillStyle = this.color as string;
+    }
 
     if (this.canvas) {
       this.snapshot = this.context?.getImageData(
@@ -103,6 +136,8 @@ export class CanvasComponent implements AfterViewInit {
         this.canvas.height
       );
     }
+
+    console.log(this.selectedTool);
   }
 
   drawing(event: MouseEvent): void {
@@ -116,14 +151,60 @@ export class CanvasComponent implements AfterViewInit {
       this.drawRect(event);
     } else if (this.selectedTool === Shapes.Circle) {
       this.drawCircle(event);
+    } else if (this.selectedTool === Shapes.Line) {
+      this.drawLine(event);
     }
     this.store.select("toolbar").subscribe((data) => {
       this.selectedTool = data.selectedShape as Shapes;
     });
 
-    console.log(this.selectedTool);
+    // console.log(this.selectedTool);
   }
-  mouseUp() {
+  mouseUp(e: MouseEvent) {
     this.isDrawing = false;
+
+    if (this.selectedTool === Shapes.Rectangle) {
+      console.log("rectangle");
+
+      this.store.dispatch(setShapeList({ value: Shapes.Rectangle }));
+    } else if (this.selectedTool === Shapes.Circle) {
+      console.log("circle");
+      this.store.dispatch(setShapeList({ value: Shapes.Circle }));
+    } else if (this.selectedTool === Shapes.Line) {
+      console.log("line");
+
+      this.store.dispatch(setShapeList({ value: Shapes.Line }));
+    }
+
+    if (this.canvas) {
+      console.log("there is canvas");
+      this.store.dispatch(
+        setCanvas({ value: this.canvas.getContext("2d") as any })
+      );
+
+      const details = this.context?.getImageData(
+        0,
+        0,
+        this.canvas?.width,
+        this.canvas?.height
+      );
+
+      // window.localStorage.setItem("setRestoreArray", JSON.stringify(details));
+
+      // console.log(details);
+      // console.log(window.localStorage.getItem("setRestoreArray"));
+
+      // this.store.dispatch(
+      //   setRestoreArray({
+      //     value: { ...details },
+      //   })
+      // );
+    }
+
+    this.store.select("toolbar").subscribe((data) => {
+      this.restoreArray = data.restoreArray;
+    });
+
+    console.log(this.restoreArray);
   }
 }

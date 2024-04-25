@@ -12,11 +12,17 @@
     <div
       *ngFor="let item of colors"
       [ngClass]="['color-circle', item.colorName]"
+      (click)="onColorClick(item.colorName)"
     ></div>
   </div>
 
   <div class="fill-color-container">
-    <input type="checkbox" id="fill-color" (click)="onFillColorClick($event)" />
+    <input
+      type="checkbox"
+      id="fill-color"
+      ng-model="getIsChecked"
+      (change)="onFillColorClick($event)"
+    />
     <label for="fill-color">Fill Color</label>
   </div>
 </div>

@@ -23,3 +23,47 @@
   font-family: Arial, Helvetica, sans-serif;
   color: #5a67ba;
 }
+
+.body {
+  padding: 15px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.drawed-element-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.type-name-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.delete-icon {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid #000000;
+  cursor: pointer;
+}
+.rectangle {
+  width: 15px;
+  height: 13px;
+  border: 2px solid #000000;
+  cursor: pointer;
+}
+.line {
+  width: 15px;
+  height: 5px;
+  border-bottom: 2px solid #000000;
+  transform: rotate(-45deg);
+  background-color: transparent;
+  cursor: pointer;
+}

@@ -11,4 +11,6 @@ export class CanvasEventListenerServiceService {
     console.log("Mouse position:", event.offsetX, event.offsetY);
     // You can perform further actions based on the mouse position
   }
+
+  // redrawCanvas() {}
 }

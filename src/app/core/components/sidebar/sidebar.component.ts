@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnChanges,
@@ -8,6 +9,8 @@ import {
   ViewChild,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
+import { CanvasEventListenerService } from "src/app/shared/services/canvas-event-listener.service";
+import { setRemoveItemFromShapeList } from "src/app/store/toolbar/toolbar.action";
 import { IInitialState } from "src/app/store/toolbar/toolbar.state";
 import { Shapes } from "../toolbar/toolbar.component";
 
@@ -22,12 +25,13 @@ export class SidebarComponent implements AfterViewInit {
   constructor(
     private store: Store<{
       toolbar: IInitialState;
-    }>
+    }>,
+    private canvasEventListenerService: CanvasEventListenerService,
+    private cdr: ChangeDetectorRef
   ) {}
   ngAfterViewInit(): void {
     this.store.select("toolbar").subscribe((data) => {
       this.shapeList = data.shapeList;
-      console.log(data.shapeList);
     });
 
     if (this.canvas) {
@@ -45,78 +49,21 @@ export class SidebarComponent implements AfterViewInit {
   canvas: HTMLCanvasElement | null = null;
 
   context: CanvasRenderingContext2D | null = null;
-
-  // deleteShape() {
-  //   if (this.context && this.canvas) {
-  //     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  //   }
-  //   shapeList.forEach((shape) => {
-  //     drawShape(ctx, shape);
-  //   });
-  // }
-
-  drawRectangle(ctx: any, rect: any) {
-    ctx.fillStyle = rect.color;
-    ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
-  }
-
-  // Function to draw a circle
-  drawCircle(ctx: any, circle: any) {
-    ctx.beginPath();
-    ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
-    ctx.fillStyle = circle.color;
-    ctx.fill();
-    ctx.closePath();
-  }
-
-  redrawCanvas() {
+  
+  redrawCanvas(index: number) {
     // Clear the canvas
 
     this.store.select("toolbar").subscribe((data) => {
       this.context = data.canvas;
-      console.log(data.canvas);
     });
 
     if (this.context) {
-      console.log("assdfasdf23");
-
-      console.log(this.context);
-
-      const canvas = document.querySelector("canvas");
-
-      if (canvas) {
-        this.context.clearRect(0, 0, canvas.width, canvas.height);
-        const imageData = this.context?.getImageData(
-          0,
-          0,
-          canvas?.width,
-          canvas?.height
-        );
-
-        // this.context.putImageData(imageData);
-      }
-
-      // const;
-
-      // this.context.putImageData();
-      // const localStorageShape = JSON.parse(
-      //   window.localStorage.getItem("rect") as string
-      // );
-
-      // Redraw all shapes
-      // shapes.forEach((shape) => {
-      // if (shape.type === "rectangle") {
-      // this.drawRectangle(this.context, localStorageShape);
-      // } else if (shape.type === "circle") {
-      // drawCircle(ctx, shape);
-      // }
-      // });
+      this.canvasEventListenerService.redrawCanvas(this.context, index);
     }
+
+    this.store.dispatch(setRemoveItemFromShapeList({ value: index }));
+
   }
 
-  // ngOnInit(): void {
-  //   this.store.select("toolbar").subscribe((data) => {
-  //     this.shapeList = data.shapeList;
-  //   });
-  // }
+
 }

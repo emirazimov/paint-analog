@@ -1,4 +1,4 @@
-<div>
+<div class="wrapper">
   <div class="header">
     <div class="header-circle">c</div>
     <p class="title">Canva</p>
@@ -7,17 +7,20 @@
   <div class="body">
     <p>Drawed elements</p>
 
-    <div *ngFor="let item of shapeList" class="drawed-element-container">
+    <div
+      *ngFor="let item of shapeList; index as i"
+      class="drawed-element-container"
+    >
       <div class="type-name-container">
         <div *ngIf="item === Shapes.Rectangle" class="rectangle"></div>
         <div *ngIf="item === Shapes.Circle" class="circle"></div>
         <div *ngIf="item === Shapes.Line" class="line"></div>
-        <p class="shape-name">{{ item }}</p>
+        <p class="shape-name">{{ item }} {{ i + 1 }}</p>
       </div>
       <img
         class="delete-icon"
         src="../../../../assets/delete-icon.png"
-        (click)="redrawCanvas()"
+        (click)="redrawCanvas(i)"
       />
     </div>
   </div>

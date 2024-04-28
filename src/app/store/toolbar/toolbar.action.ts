@@ -14,6 +14,10 @@ export const setShapeList = createAction(
   "setShapeList",
   props<{ value: string }>()
 );
+export const setRemoveItemFromShapeList = createAction(
+  "setShapeList",
+  props<{ value: number }>()
+);
 
 export const setCanvas = createAction(
   "setCanvas",

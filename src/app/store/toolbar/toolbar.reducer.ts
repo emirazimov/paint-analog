@@ -3,6 +3,7 @@ import {
   setCanvas,
   setColor,
   setIsFillColor,
+  setRemoveItemFromShapeList,
   setRestoreArray,
   setSelectedShape,
   setShapeList,
@@ -33,6 +34,12 @@ const _toolbarReducer = createReducer(
     return {
       ...state,
       shapeList: [...state.shapeList, action.value],
+    };
+  }),
+  on(setRemoveItemFromShapeList, (state, action) => {
+    return {
+      ...state,
+      shapeList: [...state.shapeList.filter((item, i) => i !== action.value)],
     };
   }),
   on(setCanvas, (state, action) => {

@@ -71,20 +71,39 @@ export class CanvasComponent implements AfterViewInit {
     }
   }
 
-  drawing(event: MouseEvent): void {
+  drawing(e: MouseEvent): void {
     // Handle mouse move event
 
-    // this.store.select("toolbar").subscribe((data) => {
-    //   this.selectedTool = data.selectedShape as Shapes;
-    // });
-
     if (this.context) {
-      this.canvasEventListenerService.drawing(event, this.context);
+      this.canvasEventListenerService.drawing(e, this.context);
     }
   }
   mouseUp(e: MouseEvent) {
     if (this.canvas && this.context) {
       this.canvasEventListenerService.mouseUp(
+        e,
+        this.canvas,
+        this.restoreArray,
+        this.context
+      );
+    }
+  }
+
+  touchStart(e: TouchEvent) {
+    if (this.canvas && this.context) {
+      this.canvasEventListenerService.touchStart(e, this.canvas, this.context);
+    }
+  }
+
+  touchMove(e: TouchEvent) {
+    if (this.context) {
+      this.canvasEventListenerService.touchMove(e, this.context);
+    }
+  }
+
+  touchEnd(e: TouchEvent) {
+    if (this.canvas && this.context) {
+      this.canvasEventListenerService.touchEnd(
         e,
         this.canvas,
         this.restoreArray,
